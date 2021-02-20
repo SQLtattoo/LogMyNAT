@@ -59,7 +59,7 @@ namespace LogMyNATPubIP
             this.openLogFileToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(139, 70);
             // 
             // showToolStripMenuItem
             // 
@@ -72,6 +72,7 @@ namespace LogMyNATPubIP
             this.openLogFileToolStripMenuItem.Name = "openLogFileToolStripMenuItem";
             this.openLogFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openLogFileToolStripMenuItem.Text = "Vie&w log file";
+            this.openLogFileToolStripMenuItem.Click += new System.EventHandler(this.openLogFileToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -105,12 +106,14 @@ namespace LogMyNATPubIP
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.Location = new System.Drawing.Point(190, 2);
+            this.linkLabel1.Location = new System.Drawing.Point(380, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(344, 16);
+            this.linkLabel1.Size = new System.Drawing.Size(155, 16);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Get LogMyNAT @ GitHub licenced under MIT License";
+            this.linkLabel1.Text = "Get LogMyNAT @ GitHub";
+            this.linkLabel1.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // lblLastChange
             // 

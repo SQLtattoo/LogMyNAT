@@ -32,8 +32,8 @@ namespace LogMyNATPubIP
             
             startUpIP = GetPublicIpAddress();
             currentIP = startUpIP;
-            mynotifyicon.Text = "LogMyNAT (the public IP now is: " + currentIP + ")";
-            mynotifyicon.ShowBalloonTip(1000, "LogMyNAT - Starting up...", "Current IP: " + currentIP,ToolTipIcon.Info);
+            mynotifyicon.Text = "LogMyNAT (Your public IP now is: " + currentIP + ")";
+            mynotifyicon.ShowBalloonTip(5, "LogMyNAT - Starting up...", "Current IP: " + currentIP,ToolTipIcon.Info);
 
             lblCurrPubIP.Text = currentIP;
 
@@ -82,7 +82,7 @@ namespace LogMyNATPubIP
                     lblCurrPubIP.Text = currentIP;
                     lblLastChange.Text = "Last logged change occurred @ " + lastLoggedIP[1];
                 }
-                mynotifyicon.ShowBalloonTip(1000, "LogMyNAT - IP changed!", "New IP: " + currentIP, ToolTipIcon.Warning);
+                mynotifyicon.ShowBalloonTip(5, "LogMyNAT - IP changed!", "New IP: " + currentIP, ToolTipIcon.Warning);
             }
             
         }
@@ -108,37 +108,27 @@ namespace LogMyNATPubIP
             w.WriteLine(logMessage + ";" + $"{DateTime.UtcNow.ToString("s") + "Z"}");
         }
 
-        public static void DumpLog(StreamReader r)
-        {
-            string line;
-            while ((line = r.ReadLine()) != null)
-            {
-                Console.WriteLine(line);
-            }
-        }
-
         private void Form1_Resize(object sender, EventArgs e)
         {
-            //if (FormWindowState.Minimized == this.WindowState)
-            //{
-            //    mynotifyicon.Visible = true;
-            //    mynotifyicon.ShowBalloonTip(10,"I'm down here","Still running in the background",ToolTipIcon.Info);
-            //    this.Hide();
-            //}
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                SetToTray();
+            }
 
-            //else if (FormWindowState.Normal == this.WindowState)
-            //{
-            //    mynotifyicon.Visible = false;
-            //}
+            else if (FormWindowState.Normal == this.WindowState)
+            {
+                mynotifyicon.Visible = false;
+            }
         }
 
         private void mynotifyicon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            //{
-            //    mynotifyicon.Visible = false;
-            //    this.Show();
-            //    this.WindowState = FormWindowState.Normal;
-            //}
+            {
+                mynotifyicon.Visible = false;
+                allowVisible = true;
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+            }
         }
 
         protected override void SetVisibleCore(bool value)
@@ -153,12 +143,12 @@ namespace LogMyNATPubIP
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (!allowClose)
-            {
-                this.Hide();
-                e.Cancel = true;
-            }
-            base.OnFormClosing(e);
+            //if (!allowClose)
+            //{
+            //    SetToTray();
+            //    e.Cancel = true;
+            //}
+            //base.OnFormClosing(e);
         }
 
         private void showToolStripMenuItem_Click(object sender, EventArgs e)
@@ -176,8 +166,7 @@ namespace LogMyNATPubIP
 
         private void openLogFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            allowClose = true;
-            Application.Exit();
+            openLogFile();
         }
 
         private void lblOpenLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -195,5 +184,16 @@ namespace LogMyNATPubIP
             CheckAndLog();
         }
 
+        private void SetToTray()
+        {
+            mynotifyicon.Visible = true;
+            mynotifyicon.ShowBalloonTip(2, "I'm down here", "Still running in the background", ToolTipIcon.Info);
+            this.Hide();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/SQLtattoo/LogMyNAT");
+        }
     }
 }
