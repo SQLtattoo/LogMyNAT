@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LogMyNATPubIP
@@ -98,11 +95,6 @@ namespace LogMyNATPubIP
             return externalip;
         }
 
-        private void showLog()
-        {
-            //open log
-        }
-
         public static void Log(string logMessage, TextWriter w)
         {
             w.WriteLine(logMessage + ";" + $"{DateTime.UtcNow.ToString("s") + "Z"}");
@@ -143,12 +135,13 @@ namespace LogMyNATPubIP
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            //if (!allowClose)
-            //{
-            //    SetToTray();
-            //    e.Cancel = true;
-            //}
-            //base.OnFormClosing(e);
+            allowClose = true; //at some point we can make this a property but for now close it
+            if (!allowClose)
+            {
+                SetToTray();
+                e.Cancel = true;
+            }
+            base.OnFormClosing(e);
         }
 
         private void showToolStripMenuItem_Click(object sender, EventArgs e)
