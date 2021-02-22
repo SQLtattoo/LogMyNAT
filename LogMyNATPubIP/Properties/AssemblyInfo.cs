@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LogMyNATPubIP")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Displays and logs your public-facing IP, runs in the system tray of your Windows.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("CLOUDOSIFY")]
 [assembly: AssemblyProduct("LogMyNATPubIP")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
