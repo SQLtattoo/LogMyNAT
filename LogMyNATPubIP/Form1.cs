@@ -45,6 +45,7 @@ namespace LogMyNATPubIP
                         using (StreamWriter w = File.AppendText(logFile))
                         {
                             Log(currentIP, w);
+                            lblLastChange.Text = "Last logged change occurred @ " + DateTime.UtcNow.ToString("s") + "Z";
                         }
                     }
                     else
@@ -60,6 +61,7 @@ namespace LogMyNATPubIP
                 {
                     w.WriteLine("IP;Timestamp"); //first time created, add headers
                     Log(currentIP, w);
+                    lblLastChange.Text = "Last logged change occurred @ " + DateTime.UtcNow.ToString("s") + "Z";
                 }
             }
 
