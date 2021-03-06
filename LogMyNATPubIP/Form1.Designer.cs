@@ -50,6 +50,7 @@ namespace LogMyNATPubIP
             this.mynotifyicon.Icon = ((System.Drawing.Icon)(resources.GetObject("mynotifyicon.Icon")));
             this.mynotifyicon.Text = "LogMyNAT by SQLtattoo";
             this.mynotifyicon.Visible = true;
+            this.mynotifyicon.Click += new System.EventHandler(this.mynotifyicon_Click);
             this.mynotifyicon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.mynotifyicon_MouseDoubleClick);
             // 
             // contextMenuStrip1
@@ -64,20 +65,20 @@ namespace LogMyNATPubIP
             // showToolStripMenuItem
             // 
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.showToolStripMenuItem.Text = "&Open";
             // 
             // openLogFileToolStripMenuItem
             // 
             this.openLogFileToolStripMenuItem.Name = "openLogFileToolStripMenuItem";
-            this.openLogFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openLogFileToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.openLogFileToolStripMenuItem.Text = "Vie&w log file";
             this.openLogFileToolStripMenuItem.Click += new System.EventHandler(this.openLogFileToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             // 
             // label1

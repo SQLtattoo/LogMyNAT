@@ -21,67 +21,81 @@ namespace LogMyNATPubIP
         public Form1()
         {
             InitializeComponent();
-
-            mynotifyicon.ContextMenuStrip = contextMenuStrip1;
-            this.showToolStripMenuItem.Click += showToolStripMenuItem_Click;
-            this.openLogFileToolStripMenuItem.Click += openLogFileToolStripMenuItem_Click;
-            this.exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
-            
-            startUpIP = GetPublicIpAddress();
-            currentIP = startUpIP;
-            mynotifyicon.Text = "LogMyNAT (Your public IP now is: " + currentIP + ")";
-            mynotifyicon.ShowBalloonTip(5, "LogMyNAT - Starting up...", "Current IP: " + currentIP,ToolTipIcon.Info);
-
-            lblCurrPubIP.Text = currentIP;
-
-            if (File.Exists(logFile))
+            try
             {
-                var lastLine = File.ReadLines(logFile).Last();
-                lastLoggedIP = lastLine.Split(';');
-                if (lastLoggedIP.Count() > 0)
+                mynotifyicon.ContextMenuStrip = contextMenuStrip1;
+                this.showToolStripMenuItem.Click += showToolStripMenuItem_Click;
+                this.openLogFileToolStripMenuItem.Click += openLogFileToolStripMenuItem_Click;
+                this.exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
+
+                startUpIP = GetPublicIpAddress();
+                currentIP = startUpIP;
+                mynotifyicon.Text = "LogMyNAT (Your public IP now is: " + currentIP + ")";
+                mynotifyicon.ShowBalloonTip(5, "LogMyNAT - Starting up...", "Current IP: " + currentIP, ToolTipIcon.Info);
+
+                lblCurrPubIP.Text = currentIP;
+
+                if (File.Exists(logFile))
                 {
-                    if (lastLoggedIP[0] != currentIP)
+                    var lastLine = File.ReadLines(logFile).Last();
+                    lastLoggedIP = lastLine.Split(';');
+                    if (lastLoggedIP.Count() > 0)
                     {
-                        using (StreamWriter w = File.AppendText(logFile))
+                        if (lastLoggedIP[0] != currentIP)
                         {
-                            Log(currentIP, w);
-                            lblLastChange.Text = "Last logged change occurred @ " + DateTime.UtcNow.ToString("s") + "Z";
+                            using (StreamWriter w = File.AppendText(logFile))
+                            {
+                                Log(currentIP, w);
+                                lblLastChange.Text = "Last logged change occurred @ " + DateTime.UtcNow.ToString("s") + "Z";
+                            }
                         }
-                    }
-                    else
-                    {
-                        lblLastChange.Text = "Last logged change occurred @ " + lastLoggedIP[1];
-                    }
-                    
-                }
-            }
-            else
-            {
-                using (StreamWriter w = File.AppendText(logFile))
-                {
-                    w.WriteLine("IP;Timestamp"); //first time created, add headers
-                    Log(currentIP, w);
-                    lblLastChange.Text = "Last logged change occurred @ " + DateTime.UtcNow.ToString("s") + "Z";
-                }
-            }
+                        else
+                        {
+                            lblLastChange.Text = "Last logged change occurred @ " + lastLoggedIP[1];
+                        }
 
-            timer1.Start();
+                    }
+                }
+                else
+                {
+                    using (StreamWriter w = File.AppendText(logFile))
+                    {
+                        w.WriteLine("IP;Timestamp"); //first time created, add headers
+                        Log(currentIP, w);
+                        lblLastChange.Text = "Last logged change occurred @ " + DateTime.UtcNow.ToString("s") + "Z";
+                    }
+                }
+
+                timer1.Start();
+            }
+            catch
+            {
+
+            }
+            
         }
 
         private void CheckAndLog()
         {
-            string probeIP = GetPublicIpAddress();
-
-            if (currentIP != probeIP)
+            try
             {
-                currentIP = probeIP;
-                using (StreamWriter w = File.AppendText(logFile))
+                string probeIP = GetPublicIpAddress();
+
+                if (currentIP != probeIP)
                 {
-                    Log(currentIP, w);
-                    lblCurrPubIP.Text = currentIP;
-                    lblLastChange.Text = "Last logged change occurred @ " + lastLoggedIP[1];
+                    currentIP = probeIP;
+                    using (StreamWriter w = File.AppendText(logFile))
+                    {
+                        Log(currentIP, w);
+                        lblCurrPubIP.Text = currentIP;
+                        lblLastChange.Text = "Last logged change occurred @ " + lastLoggedIP[1];
+                    }
+                    mynotifyicon.ShowBalloonTip(5, "LogMyNAT - IP changed!", "New IP: " + currentIP, ToolTipIcon.Warning);
                 }
-                mynotifyicon.ShowBalloonTip(5, "LogMyNAT - IP changed!", "New IP: " + currentIP, ToolTipIcon.Warning);
+            }
+            catch
+            {
+
             }
             
         }
@@ -93,70 +107,130 @@ namespace LogMyNATPubIP
 
         private static string GetPublicIpAddress()
         {
-            string externalip = new WebClient().DownloadString("http://ifconfig.me");
+            string externalip="<>";
+            try
+            {
+                externalip = new WebClient().DownloadString("http://ifconfig.me");
+            }
+            catch
+            {
+
+            }
             return externalip;
         }
 
         public static void Log(string logMessage, TextWriter w)
         {
-            w.WriteLine(logMessage + ";" + $"{DateTime.UtcNow.ToString("s") + "Z"}");
+            try
+            {
+                w.WriteLine(logMessage + ";" + $"{DateTime.UtcNow.ToString("s") + "Z"}");
+            }
+            catch
+            {
+
+            }
         }
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            if (FormWindowState.Minimized == this.WindowState)
+            try
             {
-                SetToTray();
-            }
+                if (FormWindowState.Minimized == this.WindowState)
+                {
+                    SetToTray();
+                }
 
-            else if (FormWindowState.Normal == this.WindowState)
+                else if (FormWindowState.Normal == this.WindowState)
+                {
+                    mynotifyicon.Visible = false;
+                }
+            }
+            catch
             {
-                mynotifyicon.Visible = false;
+
             }
         }
 
         private void mynotifyicon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            try
             {
-                mynotifyicon.Visible = false;
-                allowVisible = true;
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
+                {
+                    mynotifyicon.Visible = false;
+                    allowVisible = true;
+                    this.Show();
+                    this.WindowState = FormWindowState.Normal;
+                }
             }
+            catch
+            {
+
+            }
+            
         }
 
         protected override void SetVisibleCore(bool value)
         {
-            if (!allowVisible)
+            try
             {
-                value = false;
-                if (!this.IsHandleCreated) CreateHandle();
+                if (!allowVisible)
+                {
+                    value = false;
+                    if (!this.IsHandleCreated) CreateHandle();
+                }
+                base.SetVisibleCore(value);
             }
-            base.SetVisibleCore(value);
+            catch
+            {
+
+            }
+
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            allowClose = true; //at some point we can make this a property but for now close it
-            if (!allowClose)
+            try
             {
-                SetToTray();
-                e.Cancel = true;
+                allowClose = true; //at some point we can make this a property but for now close it
+                if (!allowClose)
+                {
+                    SetToTray();
+                    e.Cancel = true;
+                }
+                base.OnFormClosing(e);
             }
-            base.OnFormClosing(e);
+            catch
+            {
+
+            }
+            
         }
 
         private void showToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            allowVisible = true;
-            Show();
-            //showLog();
+            try
+            {
+                allowVisible = true;
+                Show();
+                //showLog();
+            }
+            catch
+            {
+
+            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            allowClose = true;
-            Application.Exit();
+            try
+            {
+                allowClose = true;
+                Application.Exit();
+            }
+            catch
+            {
+
+            }
         }
 
         private void openLogFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -171,7 +245,14 @@ namespace LogMyNATPubIP
 
         private void openLogFile()
         {
-            System.Diagnostics.Process.Start(logFile);
+            try
+            {
+                System.Diagnostics.Process.Start(logFile);
+            }
+            catch
+            {
+
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -181,14 +262,42 @@ namespace LogMyNATPubIP
 
         private void SetToTray()
         {
-            mynotifyicon.Visible = true;
-            mynotifyicon.ShowBalloonTip(2, "I'm down here", "Still running in the background", ToolTipIcon.Info);
-            this.Hide();
+            try
+            {
+                mynotifyicon.Visible = true;
+                mynotifyicon.ShowBalloonTip(2, "I'm down here", "Still running in the background", ToolTipIcon.Info);
+                this.Hide();
+            }
+            catch
+            {
+
+            }
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/SQLtattoo/LogMyNAT");
+            try
+            {
+                System.Diagnostics.Process.Start("https://github.com/SQLtattoo/LogMyNAT");
+            }
+            catch
+            {
+
+            }
+            
+        }
+
+        private void mynotifyicon_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(currentIP);
+            }
+            catch
+            {
+
+            }
+            
         }
     }
 }
